@@ -22,3 +22,7 @@ body {
     width: 1rem;
     height: 1rem;
 }
+
+.cbg-danger {
+    background-color: #e31337;
+}
