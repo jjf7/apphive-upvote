@@ -1,0 +1,16 @@
+module.exports =  [
+  { tag: "glowshine" },
+  { tag: "gigi8" },
+  { tag: "roelandp" },
+  { tag: "netuoso" },
+  { tag: "engrave" },
+  { tag: "theycallmedan" },
+  { tag: "blocktrades" },
+  { tag: "pgarcgo" },
+  { tag: "cervantes" },
+  { tag: "leofinance" },
+  { tag: "mindtrap" },
+  { tag: "steem.leo" },
+  { tag: "roadstories" },
+  { tag: "johnvibes" },
+];
