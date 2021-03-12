@@ -1,4 +1,4 @@
-module.exports =  [
+module.exports = [
   { tag: "glowshine" },
   { tag: "gigi8" },
   { tag: "roelandp" },
@@ -13,4 +13,15 @@ module.exports =  [
   { tag: "steem.leo" },
   { tag: "roadstories" },
   { tag: "johnvibes" },
+  { tag: "victoriag" },
+  { tag: "ecency" },
+  { tag: "emsonic" },
+  { tag: "pouchon" },
+  { tag: "chekohler" },
+  { tag: "flauwy" },
+  { tag: "themarkymark" },
+  { tag: "taskmaster4450" },
+  { tag: "whoisjohn" },
+  { tag: "perceval" },
+  { tag: "wartrapa" },
 ];

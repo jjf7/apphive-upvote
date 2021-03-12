@@ -20,7 +20,7 @@ socket.on("block", (data) => {
   
   } else {
 
-    p.innerHTML = `<div>El usuario <b>${data.tag}</b> ha comentado el post de <b>${data.parentUser}</b></div> <div class='alert alert-success'>${data.result}</div>`
+    p.innerHTML = `<div>El usuario <b>${data.tag}</b> ha comentado el post de <b>${data.parentUser}</b></div> <div class='alert cbg-danger'>${data.result}</div>`
    
   }
 
