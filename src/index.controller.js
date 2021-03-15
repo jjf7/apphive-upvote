@@ -13,6 +13,10 @@ const indexController = (req, res) => {
     const client = new Client("https://api.hive.blog");
     let stream;
 
+    const privateKey = PrivateKey.fromString(
+      process.env.PRIVATE_KEY
+    );
+
     io.on("connection", (newSocket) => {
       stream = client.blockchain.getOperationsStream();
 
@@ -50,14 +54,12 @@ const indexController = (req, res) => {
 
                 console.log("vote: ", vote);
 
-                const privateKey = PrivateKey.fromString(
-                  process.env.PRIVATE_KEY
-                );
+               
 
                 const result = await client.broadcast.vote(vote, privateKey);
                 console.log("success:", result);
 
-                data.result = `Vote Tx ID: <code>${result.id}</code>`;
+                data.result = `Vote Tx ID: <span>${result.id}</span>`;
 
                 newSocket.emit("block", data);
               } else {
