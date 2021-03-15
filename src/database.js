@@ -35,4 +35,14 @@ module.exports = [
   { tag: "krnel"},
   { tag: "edicted"},
   { tag: "oflyhigh"},
+  { tag: "tarazkp"},
+  { tag: "deathwing"},
+  { tag: "quochuy"},
+  { tag: "tlavagabond"},
+  { tag: "lukewearechange"},
+  { tag: "d-pend"},
+  { tag: "ocd"},
+  { tag: "eveuncovered"},
+  { tag: "slobberchops"},
+  { tag: "naturalmedicine"}
 ];
