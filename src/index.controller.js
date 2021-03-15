@@ -27,13 +27,13 @@ const indexController = (req, res) => {
             console.log(parent_author, author);
 
             //const findUser = DB.find((i) => i.tag === author );
-            const findUser = await getUSer(DB, author);
+           // const findUser = await getUSer(DB, author);
 
-            if (findUser) {
+            
               let data;
               if (!block.op[1].parent_author) {
                 data = {
-                  tag: findUser.tag,
+                  tag: author,
                   parentUser: "",
                 };
 
@@ -43,7 +43,7 @@ const indexController = (req, res) => {
                 //create vote object
                 const vote = {
                   voter: process.env.VOTER,
-                  author: findUser.tag,
+                  author,
                   permlink: block.op[1].permlink,
                   weight,
                 };
@@ -62,11 +62,11 @@ const indexController = (req, res) => {
                 newSocket.emit("block", data);
               } else {
                 data = {
-                  tag: findUser.tag,
+                  tag: author,
                   parentUser: block.op[1].parent_author,
                 };
               }
-            }
+             
           }
         })
         .on("end", function () {
