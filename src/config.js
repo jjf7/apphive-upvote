@@ -6,6 +6,6 @@ opts.addressPrefix = "STM";
 opts.chainId =
   "beeab0de00000000000000000000000000000000000000000000000000000000";
 
-const weight = 5000;
+const weight = 10000;
 
 module.exports = { opts, PORT, weight };

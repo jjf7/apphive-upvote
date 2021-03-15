@@ -16,7 +16,7 @@ socket.on("block", (data) => {
   
   if (data.parentUser === "") {
     
-    p.innerHTML = `<div>El usuario <b>${data.tag}</b> ha publicado</div> <div class='alert alert-info'>${data.result}</div>`
+    p.innerHTML = `<div>El usuario <b>${data.tag}</b> ha publicado</div> <div class='alert cbg-danger text-white'>${data.result}</div>`
   
   } else {
 
