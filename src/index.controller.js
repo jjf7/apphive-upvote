@@ -13,9 +13,7 @@ const indexController = (req, res) => {
     const client = new Client("https://api.hive.blog");
     let stream;
 
-    const privateKey = PrivateKey.fromString(
-      process.env.PRIVATE_KEY
-    );
+    const privateKey = PrivateKey.fromString(process.env.PRIVATE_KEY);
 
     io.on("connection", (newSocket) => {
       stream = client.blockchain.getOperationsStream();
@@ -31,44 +29,84 @@ const indexController = (req, res) => {
             console.log(parent_author, author);
 
             //const findUser = DB.find((i) => i.tag === author );
-           // const findUser = await getUSer(DB, author);
+            // const findUser = await getUSer(DB, author);
 
-            
-              let data;
-              if (!block.op[1].parent_author) {
-                data = {
-                  tag: author,
-                  parentUser: "",
-                };
+            let data;
+            if (!block.op[1].parent_author) {
+              data = {
+                tag: author,
+                parentUser: "",
+              };
 
-                console.log(block);
-                console.log("data:", data);
+              console.log(block);
+              console.log("data:", data);
 
-                //create vote object
-                const vote = {
-                  voter: process.env.VOTER,
-                  author,
-                  permlink: block.op[1].permlink,
-                  weight,
-                };
+              //create vote object
+              const vote = {
+                voter: process.env.VOTER,
+                author,
+                permlink: block.op[1].permlink,
+                weight,
+              };
 
-                console.log("vote: ", vote);
+              console.log("vote: ", vote);
 
-               
+              const result = await client.broadcast.vote(vote, privateKey);
+              console.log("success:", result);
 
-                const result = await client.broadcast.vote(vote, privateKey);
-                console.log("success:", result);
+              data.result = `Vote Tx ID: <span>${result.id}</span>`;
 
-                data.result = `Vote Tx ID: <span>${result.id}</span>`;
+              newSocket.emit("block", data);
 
-                newSocket.emit("block", data);
+              // Seguir usuario
+
+              let status = await client.call("follow_api", "get_following", [
+                process.env.VOTER,
+                author,
+                "blog",
+                1,
+              ]);
+
+              console.log({ status: status });
+
+              if (status.length > 0 && status[0].process.env.VOTER == process.env.VOTER) {
+                var type = "";
               } else {
-                data = {
-                  tag: author,
-                  parentUser: block.op[1].parent_author,
-                };
+                var type = "blog";
               }
-             
+
+              const json = JSON.stringify([
+                "follow",
+                {
+                  follower: process.env.VOTER,
+                  following: author,
+                  what: [type], //null value for unfollow, 'blog' for follow
+                },
+              ]);
+
+              const dataF = {
+                id: "follow",
+                json: json,
+                required_auths: [],
+                required_posting_auths: [process.env.VOTER],
+              };
+
+              //with variables assigned we can broadcast the operation
+
+              client.broadcast.json(dataF, privateKey).then(
+                function (result) {
+                  console.log("user follow result: ", result);
+                },
+                function (error) {
+                  console.error(error);
+                }
+              );
+            } else {
+              data = {
+                tag: author,
+                parentUser: block.op[1].parent_author,
+              };
+            }
           }
         })
         .on("end", function () {
