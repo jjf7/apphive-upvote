@@ -128,4 +128,4 @@ const followController = (req, res) => {
   }
 };
 
-module.exports = indexController;
+module.exports = followController;
