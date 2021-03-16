@@ -4,12 +4,14 @@ const morgan = require("morgan");
 const exphbs = require("express-handlebars");
 const path = require("path");
 const { PORT } = require('./config')
-
 // Initializations
 const app = express();
-
 const server = require("http").createServer(app);
-module.exports =  server 
+const io = require("socket.io")(server);
+
+module.exports = io 
+
+//module.exports =  server 
 
 app.set("views", path.join(__dirname, "views"));
 
@@ -29,6 +31,7 @@ app.use(morgan("dev"));
 
 // Routes 
 app.get("/",  require('./index.controller'));
+app.get("/follow",  require('./follow.controller'));
 
 app.get('/contacto' , (req, res) => {
   res.render('contact')
