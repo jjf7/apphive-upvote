@@ -8,8 +8,11 @@ const { PORT } = require('./config')
 const app = express();
 const server = require("http").createServer(app);
 const io = require("socket.io")(server);
-
 module.exports = io 
+
+const upvotes = require('./index.controller');
+
+upvotes()
 
 //module.exports =  server 
 
@@ -30,7 +33,9 @@ app.set("view engine", ".hbs");
 app.use(morgan("dev"));
 
 // Routes 
-app.get("/",  require('./index.controller'));
+app.get("/",  (req,res) => {
+  res.send('Welcome Upvotes Hive by Jfdesousa7!!')
+});
 app.get("/follow",  require('./follow.controller'));
 
 app.get('/contacto' , (req, res) => {
