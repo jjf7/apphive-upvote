@@ -1,74 +1,59 @@
 //const io = require("./index");
 const { Client, PrivateKey } = require("@hiveio/dhive");
 const DB = require("./database");
-const { weight } = require("./config");
-const upvotes = () => {
-  async function getUSer(DB, author) {
-    return await DB.find((i) => i.tag === author);
-  }
+const { weight, repLog10, upvote_reputation } = require("./config");
 
-  try {
-    const client = new Client("https://api.hive.blog");
-    let stream;
+const upvotes =  () => {
+  // async function getUSer(DB, author) {
+  // return await DB.find((i) => i.tag === author);
+  //}
 
-    const privateKey = PrivateKey.fromString(process.env.PRIVATE_KEY);
+  let stream;
+  const client = new Client("https://api.hive.blog");
+  const privateKey = PrivateKey.fromString(process.env.PRIVATE_KEY);
 
-    console.log("Iniciando ...");
-    stream = client.blockchain.getOperationsStream();
+  console.log("Starting stream ...");
+  stream = client.blockchain.getOperationsStream();
 
-    stream
-      .on("data", async function (block) {
+  stream.on("data", async (block) => {
+      try {
         const op = block.op[0];
 
         if (op === "comment") {
-          const parent_author = block.op[1].parent_author.toString();
-          const author = block.op[1].author.toString();
+          if (!block.op[1].parent_author) {
+            const author = block.op[1].author.toString();
 
-          console.log(parent_author, author);
+            // console.log(author);
+            const obj = [author];
 
-          const findUser = await getUSer(DB, author);
+            const acc = await client.database.call("get_accounts", [obj]);
 
-          if (findUser) {
-            let data;
-            if (!block.op[1].parent_author) {
-              data = {
-                tag: findUser.tag,
-                parentUser: "",
-              };
+            const reputation = repLog10(acc[0].reputation);
 
-              console.log(block);
-              console.log("data:", data);
-
+            if (reputation > upvote_reputation) {
+              console.log(`Reputation of ${author} = ${reputation}`);
               //create vote object
               const vote = {
                 voter: process.env.VOTER,
-                author: findUser.tag,
+                author: author,
                 permlink: block.op[1].permlink,
                 weight,
               };
 
-              console.log("vote: ", vote);
-
+              // console.log("vote: ", vote);
               const result = await client.broadcast.vote(vote, privateKey);
-              console.log("success:", result);
-
-              data.result = `Vote Tx ID: <span>${result.id}</span>`;
-            } else {
-              data = {
-                tag: findUser.tag,
-                parentUser: block.op[1].parent_author,
-              };
+              console.log("Vote success ID: ", result.id);
             }
           }
         }
-      })
-      .on("end", function () {
-        // done
-        console.log("END");
-      });
-  } catch (error) {
-    console.log(error);
-  }
+      } catch (error) {
+        console.log(error.message);
+      }
+    })
+    .on("end", function () {
+      // done
+      console.log("END");
+    });
 };
 
 module.exports = upvotes;

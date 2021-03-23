@@ -45,4 +45,4 @@ app.get('/contacto' , (req, res) => {
 // Static Files 
 app.use(express.static(path.join(__dirname, "public")));
 
-server.listen(PORT, () => console.log("Server on port ", PORT));
+server.listen(PORT);
