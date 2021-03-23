@@ -31,6 +31,6 @@ const repLog10 = (rep2) => {
   return out;
 };
 
-const upvote_reputation = 69;
+const upvote_reputation = 64;
 
 module.exports = { opts, PORT, weight, repLog10, upvote_reputation };
