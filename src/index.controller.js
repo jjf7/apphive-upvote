@@ -4,7 +4,7 @@ const { weight, repLog10, upvote_reputation } = require("./config");
 const upvotes = async () => {
  
   let stream;
-
+  try {
     const client = new Client("https://api.hive.blog");
     const privateKey = PrivateKey.fromString(process.env.PRIVATE_KEY);
 
@@ -46,6 +46,9 @@ const upvotes = async () => {
       // done
       console.log("END");
     });
+  } catch (error) {
+    console.log(`error first try = ${error.message}`);
+  }
 };
 
 module.exports = upvotes;
